@@ -20,7 +20,7 @@ def settings(speechConfig):
             voice_value = settings.get('voice')
 
             os.system('cls')
-            print(f'Current settings:\nVocie: {voice_value}')
+            print(f'Current settings:\nVocie:\033[32m {voice_value} \033[0m')
 
             print('\nDo you want to change settings? \n1. Yes\n2. No')
             answer = input('\nAnswer: ')
