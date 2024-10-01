@@ -7,9 +7,9 @@ import yaml
 def main():
     
     speechConfig = speech_config()
-    inputText = get_input()
     filename = set_file_name()
     voiceName = settings(speechConfig)
+    inputText = get_input()
     print(voiceName)
     text_synthesis(speechConfig, filename, voiceName, inputText)
 
@@ -50,7 +50,17 @@ def get_input():
 
     with open(file_path, 'r', encoding='utf-8') as file:
         text_from_input_file = file.read()
-    
+    os.system('cls')
+    if text_from_input_file =='':
+        print('\033[31minput text empty\033[0m')
+        exit()
+    print(text_from_input_file)
+    print('\nContinue with above text?\n1. Yes\n2. No')
+    Answer = input('\nAnswer: ')
+
+    if Answer != 1:
+        exit()
+
     return text_from_input_file
 
 def set_file_name():
