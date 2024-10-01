@@ -2,6 +2,48 @@ import os
 import azure.cognitiveservices.speech as speechsdk
 from datetime import datetime
 from babel import Locale
+import yaml
+
+def main():
+    
+    speechConfig = speech_config()
+    inputText = get_input()
+    filename = set_file_name()
+    voiceName = settings(speechConfig)
+    print(voiceName)
+    text_synthesis(speechConfig, filename, voiceName, inputText)
+
+def settings(speechConfig):
+        while True:
+            with open('settings.yaml', 'r') as f:
+                settings = yaml.safe_load(f)
+            voice_value = settings.get('voice')
+
+            os.system('cls')
+            print(f'Current settings:\nVocie: {voice_value}')
+
+            print('\nDo you want to change settings? \n1. Yes\n2. No')
+            answer = input('\nAnswer: ')
+
+            os.system('cls')
+            if answer == '1':
+                change_settings(speechConfig)
+            elif answer == '2':
+                return voice_value
+            else:
+                print('Answer most be 1 or 2!!!')
+                
+    
+        input('stop')
+
+def change_settings(speechConfig):
+    with open('settings.yaml', 'r') as f:
+        settings = yaml.safe_load(f)
+    
+    settings['voice'] = list_available_voices(speechConfig)
+    
+    with open('settings.yaml', 'w') as file:
+        yaml.dump(settings, file)
 
 def get_input():
     file_path = 'input.txt'
@@ -11,11 +53,12 @@ def get_input():
     
     return text_from_input_file
 
-def set_file_date():
+def set_file_name():
     current_time = datetime.now()
     time_string = current_time.strftime("%Y%m%d%H%M%S")
+    fileName = f"output {time_string}.mp3"
 
-    return time_string
+    return  fileName
 
 def speech_config():
     speech_config = speechsdk.SpeechConfig(subscription=os.environ.get('SPEECH_KEY'), region=os.environ.get('SPEECH_REGION'))
@@ -117,10 +160,4 @@ def text_synthesis(speech_config, filename, voiceName, text):
                 print("Did you set the speech resource key and region values?")
 
 if __name__ == "__main__":
-    speechConfig = speech_config()
-    inputText = get_input()
-    filename = f"output {set_file_date()}.mp3"
-    voiceName = list_available_voices(speechConfig)
-    print(voiceName)
-    input("pause")
-    text_synthesis(speechConfig, filename, voiceName, inputText)
+    main()
