@@ -149,18 +149,14 @@ def text_synthesis(speech_config, filename, voiceName, text):
     speech_config.speech_synthesis_voice_name = voiceName
     text_chunks = chunk_text(text)
 
-    # Set up the audio output to save the synthesized speech to a file
     audio_config = speechsdk.audio.AudioOutputConfig(filename=filename)
 
-    # Create a SpeechSynthesizer with the specified audio output
     speech_synthesizer = speechsdk.SpeechSynthesizer(speech_config=speech_config, audio_config=audio_config)
 
     for chunk in text_chunks:
-        # Start synthesizing each chunk
-        print(f"Synthesizing chunk: {chunk[:30]}...")  # Preview of the chunk
-        speech_synthesis_result = speech_synthesizer.speak_text(chunk)  # Synthesize synchronously
+        print(f"Synthesizing chunk: {chunk[:30]}...") 
+        speech_synthesis_result = speech_synthesizer.speak_text(chunk)
 
-        # Check if the synthesis is successful
         if speech_synthesis_result.reason == speechsdk.ResultReason.SynthesizingAudioCompleted:
             print("Chunk synthesized successfully.")
         elif speech_synthesis_result.reason == speechsdk.ResultReason.Canceled:
